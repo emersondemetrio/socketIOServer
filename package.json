@@ -1,0 +1,21 @@
+{
+	"name": "socketioserver",
+	"version": "1.0.0",
+	"description": "Socket Io Server",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/emersondemetrio/socketIOServer.git"
+	},
+	"author": "Emerson Demetrio",
+	"engines": {
+		"node": "10.3.0"
+	},
+	"scripts": {
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"express": "4.16.4",
+		"socket.io": "2.2.0"
+	}
+}
