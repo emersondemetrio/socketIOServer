@@ -2,6 +2,7 @@
 	"title": "New Feature!",
 	"excerpt": "New Feature!<br>Now you can customize your avatar uploading your selfie...",
 	"full": "Now you can customize your avatar uploading your selfie.<br>Just click on the avatar, take or select a picture and save.",
-	"image": "",
-	"date": ""
+	"image": "http://res.cloudinary.com/nowappsstudio/image/upload/v1549936653/profile-pictures/godt35dp8dfaroajec6k.png",
+	"date": "toBeGenerated",
+	"action": "update-profile-picture"
 }]

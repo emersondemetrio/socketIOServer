@@ -50,7 +50,9 @@ const parser = multer({
 	storage
 });
 
-app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')))
+app.get('/socket-client', (req, res) => res.sendFile(path.resolve(__dirname, 'socket-client.html')));
+app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')));
+
 app.post('/api/images', parser.single("image"), (req, res) => {
 	console.log("req.file", req.file);
 
