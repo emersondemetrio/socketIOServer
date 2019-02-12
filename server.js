@@ -1,15 +1,67 @@
 const express = require('express');
+
+// socket
 const socketIO = require('socket.io');
+const notifications = require('./notifications.json');
+
+// image uplaoder
 const path = require('path');
+const http = require('http');
+const multer = require('multer');
+const cloudinary = require("cloudinary");
+const cloudinaryStorage = require("multer-storage-cloudinary");
 
+let cloudConfig = {};
+let inDevMode = true;
+
+try {
+	cloudConfig = require('./keys.json');
+} catch (error) {
+	console.log('Keys not found:', error);
+	inDevMode = false;
+	// prod
+	cloudConfig = {
+		cloud_name: 'nowappsstudio',
+		api_key: process.env.API_KEY,
+		api_secret: process.env.API_SECRET
+	};
+}
+
+const app = express();
 const PORT = process.env.PORT || 3000;
-const INDEX = path.join(__dirname, 'index.html');
 
-const server = express()
-	.use((req, res) => res.sendFile(INDEX))
-	.listen(PORT, () => console.log(`Listening on ${PORT}`));
+cloudinary.config(cloudConfig);
 
+const storage = cloudinaryStorage({
+	cloudinary,
+	folder: "profile-pictures",
+	allowedFormats: [
+		"jpg",
+		"png"
+	],
+	transformation: [{
+		width: 500,
+		height: 500,
+		crop: "limit"
+	}]
+});
+
+const parser = multer({
+	storage
+});
+
+app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')))
+app.post('/api/images', parser.single("image"), (req, res) => {
+	console.log("req.file", req.file);
+
+	res.json({
+		resp: req.file
+	});
+});
+
+const server = http.createServer(app);
 const io = socketIO(server);
+server.listen(PORT);
 
 io.on('connection', (socket) => {
 	console.log('Client connected');
@@ -17,7 +69,11 @@ io.on('connection', (socket) => {
 });
 
 setInterval(() => {
-	const d = new Date().toTimeString();
-	console.log(`Server Time Socket: ${d}`);
-	io.emit('time', d);
-}, 1000);
+	const toSend = JSON.stringify(notifications.map(n => {
+		n.date = new Date();
+		return n;
+	}));
+
+	console.log(`\nNotification: ${toSend}`);
+	io.emit('notifications', toSend);
+}, inDevMode ? 1000 : 5000);
