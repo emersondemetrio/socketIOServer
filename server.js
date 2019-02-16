@@ -72,6 +72,7 @@ io.on('connection', (socket) => {
 
 setInterval(() => {
 	const toSend = JSON.stringify(notifications.map(n => {
+		n.id = new Date().getTime();
 		n.date = new Date();
 		return n;
 	}));
