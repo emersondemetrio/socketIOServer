@@ -87,4 +87,4 @@ setInterval(() => {
 
 	console.log(`\nNotification: ${toSend}`);
 	io.emit('notifications', toSend);
-}, inDevMode ? 1000 : 15000);
+}, inDevMode ? 15000 : 30000);
