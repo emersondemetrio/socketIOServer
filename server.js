@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors');
+// const cors = require('cors');
 // socket
 const socketIO = require('socket.io');
 const notifications = require('./notifications.json');
@@ -8,8 +8,8 @@ const notifications = require('./notifications.json');
 const path = require('path');
 const http = require('http');
 const multer = require('multer');
-const cloudinary = require("cloudinary");
-const cloudinaryStorage = require("multer-storage-cloudinary");
+const cloudinary = require('cloudinary');
+const cloudinaryStorage = require('multer-storage-cloudinary');
 
 let cloudConfig = {};
 let inDevMode = true;
@@ -28,22 +28,29 @@ try {
 }
 
 const app = express();
-app.use(cors());
+app.all('*', (req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Credentials', true);
+	res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+	res.header('Access-Control-Allow-Methods', 'POST');
+	next();
+});
+
 const PORT = process.env.PORT || 3000;
 
 cloudinary.config(cloudConfig);
 
 const storage = cloudinaryStorage({
 	cloudinary,
-	folder: "profile-pictures",
+	folder: 'profile-pictures',
 	allowedFormats: [
-		"jpg",
-		"png"
+		'jpg',
+		'png'
 	],
 	transformation: [{
 		width: 500,
 		height: 500,
-		crop: "limit"
+		crop: 'limit'
 	}]
 });
 
@@ -54,8 +61,8 @@ const parser = multer({
 app.get('/socket-client', (req, res) => res.sendFile(path.resolve(__dirname, 'socket-client.html')));
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')));
 
-app.post('/api/images', parser.single("image"), (req, res) => {
-	console.log("req.file", req.file);
+app.post('/api/images', parser.single('image'), (req, res) => {
+	console.log('req.file', req.file);
 
 	res.json({
 		resp: req.file
