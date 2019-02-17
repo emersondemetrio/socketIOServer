@@ -16,6 +16,7 @@
 	},
 	"dependencies": {
 		"cloudinary": "^1.13.2",
+		"cors": "^2.8.5",
 		"express": "4.16.4",
 		"multer": "^1.4.1",
 		"multer-storage-cloudinary": "^2.2.1",

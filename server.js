@@ -1,5 +1,5 @@
 const express = require('express');
-
+const cors = require('cors');
 // socket
 const socketIO = require('socket.io');
 const notifications = require('./notifications.json');
@@ -28,6 +28,7 @@ try {
 }
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 3000;
 
 cloudinary.config(cloudConfig);
